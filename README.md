@@ -1,0 +1,245 @@
+# SwinWNet  
+**A Deep Learning Framework for Multimodal Processing of 2D Neutron Diffraction Data**
+
+---
+
+## 📌 Overview
+
+This repository contains the official implementation of **SwinWNet** — a multimodal deep learning framework for **joint segmentation and super-resolution (upscaling)** of 2D time-of-flight neutron diffraction data acquired with position-sensitive detectors (PSD).
+
+The framework is specifically designed for **physically safe processing** of diffraction patterns, preserving:
+- peak positions,
+- integral intensities,
+- peak shapes,
+- and overall diffraction physics.
+
+In addition to standard image-based metrics, the framework provides **physics-aware evaluation tools** operating directly in *d-space*.
+
+The implementation accompanies the corresponding research article and includes:
+- full training pipelines,
+- pretrained models,
+- evaluation scripts,
+- physical distortion metrics,
+- and experimental notebooks.
+
+---
+
+## ✨ Key Features
+
+- **Multimodal input**: diffraction data + corresponding error matrix
+- **Joint learning** of segmentation and super-resolution
+- **Transformer-based architecture** (Swin Transformer backbone)
+- **Physically motivated evaluation metrics**
+- **Three-stage training strategy**
+- Optional **reinforcement learning fine-tuning** (experimental)
+- Ready-to-use pretrained models
+
+---
+
+## 🧠 Model Architecture
+
+**SwinWNet** is a dual-branch architecture consisting of:
+- a **segmentation branch** (SwinUNet-like),
+- a **super-resolution (upscaling) branch**,
+- and shared cross-scale representations.
+
+Both branches are built on **Swin Transformer blocks**, enabling efficient local self-attention while preserving spatial structure.
+
+The model supports:
+- single-channel input: diffraction only `[B,1,H,W]`,
+- multimodal input: diffraction + error matrix `[B,2,H,W]`.
+
+---
+
+## 🗂️ Repository Structure
+
+### 📁 `datasets/`
+Datasets used for training and evaluation.
+
+- `segmentation_maps.pkl`  
+  Ground truth segmentation masks for all crystal structures.
+
+- `dataset.pkl`  
+  Main training dataset.  
+  📥 Available at:  
+  https://huggingface.co/datasets/popoff4rtem/2D-Neutron-Diffraction-Dataset-for-Discriminative-Models
+
+- `test_data.pkl`  
+  Lightweight test dataset.  
+  Usage instructions are provided in `tutorial.ipynb`.
+
+- `test_diffraction+error_matrices.pt`  
+  Same test data organized in tensor format.
+
+---
+
+### 📁 `experiments/`
+Experimental notebooks used in the study.
+
+- `transformer_segmentation.ipynb`  
+  Pretraining of the segmentation branch.
+
+- `SwinSR_train.ipynb`  
+  Pretraining of the upscaling branch.
+
+- `SwinWNet_train.ipynb`  
+  Training SwinWNet using diffraction-only input.
+
+- `SwinWNet_error_mx_file_tune.ipynb`  
+  Full multimodal training (diffraction + error matrix).
+
+- `Physycal_metrics_test.ipynb`  
+  Evaluation of physical distortions in diffraction peaks.
+
+- `SwinWNet_RL_fine_tune_updated.ipynb`  
+  Reinforcement learning fine-tuning (experimental).
+
+- `SwinUNet.py`, `SwinUNet_old.py`  
+  Model architecture definitions.
+
+---
+
+### 📁 `models/`
+Pretrained model weights.
+
+- `SwinUnet_binary_segmentation_diffraction.pth`  
+  Segmentation-only model.
+
+- `SwinUnetSR_upscaler_for_segmented_diffraction.pth`  
+  Upscaling-only model.
+
+- `SwinWNet_diffraction.pth`  
+  Full model (diffraction only).
+
+- `SwinWNet_diffraction+error_matrix.pth`  
+  Full multimodal model.
+
+- `SwinWNet_finetuned_rl_simple_alpha_policy.pth`  
+  RL-finetuned model (beta).
+
+---
+
+### 📁 `results/`
+Stored evaluation metrics for all experimental scenarios.
+
+---
+
+### 📁 `support_files/`
+Utilities for dataset generation and physical metric computation.
+
+---
+
+## ⚙️ Core Framework Files
+
+- `SwinWNet.py`  
+  Main model implementation.
+
+- `Segmentator_pretrain.py`  
+  Segmentation branch pretraining pipeline.
+
+- `Upscaler_pretrain.py`  
+  Upscaling branch pretraining pipeline.
+
+- `FullModel_supervised_trainer.py`  
+  Full supervised training pipeline.
+
+- `Supervised_train_full_pipline.py`  
+  Simplified end-to-end training pipeline.
+
+- `ST_Inference_Pipline.py`  
+  Supervised inference pipeline.
+
+- `Diffraction_metrics.py`  
+  Physics-aware peak distortion metrics.
+
+---
+
+### 🧪 Reinforcement Learning (Experimental)
+
+- `RL_policy.py`  
+  Alpha policy network.
+
+- `RL_finetuning_pipline.py`  
+  RL fine-tuning pipeline.
+
+- `RL_Inference_Pipline.py`  
+  RL-aware inference pipeline.
+
+⚠️ **Note:** RL components are experimental and provided for research purposes.
+
+---
+
+## 📊 Evaluation Metrics
+
+### Segmentation
+- Pixel Accuracy
+- IoU
+- Dice
+- Precision
+- Recall  
+Evaluated at thresholds **0.25 / 0.5 / 0.75**
+
+### Super-Resolution
+- PSNR
+- SSIM
+
+### Physical Metrics (d-space)
+- Integral intensity distortion
+- Peak intensity distortion
+- Peak shape divergence (Wasserstein-1 distance)
+
+---
+
+## 🚀 Quick Start
+
+### 1️⃣ Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 2️⃣ Download dataset
+```python
+Pythonfrom datasets import load_dataset
+dataset = load_dataset("popoff4rtem/2D-Neutron-Diffraction-Dataset-for-Discriminative-Models")
+```
+
+### 3️⃣ Run tutorial
+Open and follow:
+tutorial.ipynb
+
+### 🔬 Intended Use
+This framework is designed for:
+
+* neutron diffraction data post-processing
+* physics-preserving super-resolution
+* detector resolution enhancement
+* uncertainty-aware diffraction analysis
+
+It does not hallucinate physical features and can be safely applied in experimental workflows.
+
+### 📖 Citation
+If you use this code in your research, please cite the corresponding article:
+```bibtext
+bibtex@article{Popoff2025SwinWNet,
+  title   = {SwinWNet: A Deep Learning Framework for Multimodal Processing of 2D Neutron Diffraction Data},
+  author  = {Popoff, Artem},
+  journal = {TBD},
+  year    = {2025}
+}
+```
+
+### ⚠️ Disclaimer
+This project is provided for research purposes only.
+Reinforcement learning components are experimental.
+
+### 🤝 Acknowledgements
+This work builds upon advances in:
+
+* Transformer-based vision models
+* super-resolution
+* physics-aware machine learning
+
+
+### 📬 Contact
+For questions or collaboration:
+Artem Popoff popoff4rtem@gmail.com
