@@ -13,6 +13,10 @@ The framework is specifically designed for **physically safe processing** of dif
 - peak shapes,
 - and overall diffraction physics.
 
+![2D Diffractions Postpocessing samples](Diffraction%20framework%20PRX%20Intellegence/Inference%202d.png)
+
+![Postpocessing samples in the space of interplanar distances I(d)](Diffraction%20framework%20PRX%20Intellegence/Inference%201d.png)
+
 In addition to standard image-based metrics, the framework provides **physics-aware evaluation tools** operating directly in *d-space*.
 
 The implementation accompanies the corresponding research article and includes:
@@ -43,11 +47,15 @@ The implementation accompanies the corresponding research article and includes:
 - a **super-resolution (upscaling) branch**,
 - and shared cross-scale representations.
 
+![SwinWNet Architecture](Diffraction%20framework%20PRX%20Intellegence/SwinWNet%20architecture.png)
+
 Both branches are built on **Swin Transformer blocks**, enabling efficient local self-attention while preserving spatial structure.
 
 The model supports:
 - single-channel input: diffraction only `[B,1,H,W]`,
 - multimodal input: diffraction + error matrix `[B,2,H,W]`.
+
+![SwinWNet Inference Pipline](Diffraction%20framework%20PRX%20Intellegence/SwinWNet%20Inference%20Procession.png)
 
 ---
 
