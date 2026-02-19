@@ -7,6 +7,8 @@
 
 This repository contains the official implementation of **SwinWNet** — a multimodal deep learning framework for **joint segmentation and super-resolution (upscaling)** of 2D time-of-flight neutron diffraction data acquired with position-sensitive detectors (PSD).
 
+📄 (Paper link will be added after publication)
+
 The framework is specifically designed for **physically safe processing** of diffraction patterns, preserving:
 - peak positions,
 - integral intensities,
@@ -250,4 +252,4 @@ This work builds upon advances in:
 
 ### 📬 Contact
 For questions or collaboration:
-Artem Popoff popoff4rtem@gmail.com
+Artem Popov popoff4rtem@gmail.com
